@@ -1,18 +1,9 @@
-import { message } from "antd";
-import { PropsWithChildren } from "react";
-import { useDrop } from "react-dnd";
+import { CommonComponentProps } from "../../interface";
+import useMaterialDrop from "../../hooks/useMaterialDrop";
 
-const Page = ({ children }: PropsWithChildren) => {
+const Page = ({ children, id, name }: CommonComponentProps) => {
+    const { canDrop, drop } = useMaterialDrop(['Button', 'Container'], id);
 
-    const [{ canDrop }, drop] = useDrop(() => ({
-        accept: ['Button', 'Container'],
-        drop: (item: { type: string }) => {
-            message.success(item.type);
-        },
-        collect: (monitor) => {
-            return { canDrop: monitor.canDrop() }
-        },
-    }));
     return <div ref={drop} className="p-[20px] h-[100%] box-border" style={{ border: canDrop ? '2px blue solid' : 'none' }}>{children}</div>
 };
 
