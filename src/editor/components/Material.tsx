@@ -5,11 +5,11 @@ import MaterialItem from "./MaterialItem";
 const Material = () => {
     const { componentConfig } = useComponentsConfigStore();
     const components = useMemo(() => {
-        return Object.values(componentConfig);
+        return Object.values(componentConfig).filter(c => c.name !== 'Page');
     }, [componentConfig]);
 
     return <>{components.map(c => (
-        <MaterialItem key={c.name} name={c.name} />
+        <MaterialItem key={c.name} name={c.name} desc={c.desc} />
     ))}</>
 }
 

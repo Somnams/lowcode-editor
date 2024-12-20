@@ -5,6 +5,7 @@ import Page from "../materials/Page";
 
 export interface ComponentConfig {
     name: string;
+    desc: string;
     defaultProps: Record<string, any>;
     component: any;
 }
@@ -19,9 +20,9 @@ interface Action {
 
 export const useComponentsConfigStore = create<State & Action>((set) => ({
     componentConfig: {
-        Container: { name: "Container", defaultProps: {}, component: Container },
-        Button: { name: "Button", defaultProps: { type: 'primary', text: 'primary' }, component: Button },
-        Page: { name: 'Page', defaultProps: {}, component: Page }
+        Container: { name: "Container", desc: 'container', defaultProps: {}, component: Container },
+        Button: { name: "Button", desc: 'button', defaultProps: { type: 'primary', text: 'primary' }, component: Button },
+        Page: { name: 'Page', desc: 'root page', defaultProps: {}, component: Page }
     },
     registerComponent: (name, componentConfig) => set((state) => {
         return { componentConfig: { ...state.componentConfig, [name]: componentConfig } };

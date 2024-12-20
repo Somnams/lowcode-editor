@@ -18,9 +18,9 @@ const useMaterialDrop = (accept: string[], id: number) => {
             addComponent({
                 id: new Date().getTime(),
                 name: item.type,
-                // desc: config.desc,
+                desc: config.desc,
                 props: config.defaultProps
-            }, id)
+            }, id);
         },
         collect: (monitor) => ({
             canDrop: monitor.canDrop(),

@@ -27,8 +27,11 @@ const HoverMask = (props: IProps) => {
 
     useEffect(() => {
         updatePosition();
-
     }, [componentId]);
+
+    useEffect(() => {
+        updatePosition();
+    }, [components]);
 
     const updatePosition = () => {
         if (!componentId || !container) return;
@@ -52,7 +55,6 @@ const HoverMask = (props: IProps) => {
             labelTop
         });
     };
-
 
     return createPortal(<div
         style={{
@@ -86,7 +88,7 @@ const HoverMask = (props: IProps) => {
                 cursor: 'pointer',
                 whiteSpace: 'nowrap'
             }}>
-                {curComp?.name}
+                {curComp?.desc}
             </div>
         </div>
     </div>, el)
