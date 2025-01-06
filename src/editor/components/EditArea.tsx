@@ -42,6 +42,7 @@ const EditArea = () => {
                 key: c.id,
                 id: c.id,
                 name: c.name,
+                styles: c.styles,
                 ...config.defaultProps,
                 ...c.props
             }, renderComponents(c.children || []));

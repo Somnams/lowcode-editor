@@ -2,7 +2,7 @@ import { Allotment } from 'allotment';
 import 'allotment/dist/style.css';
 import EditArea from './components/EditArea';
 import Material from './components/Material';
-import Settings from './components/Settings';
+import Setting from './components/Setting';
 
 const ReactPlayGround = () => {
     return <div className="flex flex-col h-[100vh]">
@@ -15,7 +15,7 @@ const ReactPlayGround = () => {
                 <EditArea />
             </Allotment.Pane>
             <Allotment.Pane minSize={300} maxSize={500} preferredSize={300}>
-                <Settings />
+                <Setting />
             </Allotment.Pane>
         </Allotment>
     </div>

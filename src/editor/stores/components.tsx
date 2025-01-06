@@ -1,8 +1,10 @@
+import { CSSProperties } from 'react';
 import { create } from 'zustand';
+import { CommonComponentProps } from '../interface';
 
-export interface Component {
-    id: number;
-    name: string;
+type _Omit<T, K extends keyof T> = { [P in keyof T as Exclude<P, K>]: T[P] }
+
+export interface Component extends _Omit<CommonComponentProps, 'children'> {
     desc: string;
     props: any;
     children?: Component[];
@@ -20,6 +22,7 @@ interface Action {
     deleteComponent: (componentId: number) => void;
     updateComponent: (componentId: number, props: any) => void;
     setCurComponentId: (componentId: number | null) => void;
+    updateComponentStyles: (componentId: number, styles: CSSProperties, replace?: boolean) => void;
 }
 
 export const useComponentsStore = create<State & Action>(((set, get) => ({
@@ -66,6 +69,14 @@ export const useComponentsStore = create<State & Action>(((set, get) => ({
         const comp = getComponentById(componentId, state.components);
         if (comp) {
             comp.props = { ...comp.props, ...props };
+        }
+        return { components: [...state.components] };
+    }),
+    updateComponentStyles: (componentId, styles, replace) => set((state) => {
+        const comp = getComponentById(componentId, state.components);
+        if (comp) {
+            comp.styles = replace ? { ...styles } : { ...comp.styles, ...styles };
+            return { components: [...state.components] };
         }
         return { components: [...state.components] };
     })

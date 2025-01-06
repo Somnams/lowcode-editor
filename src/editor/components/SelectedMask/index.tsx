@@ -51,7 +51,9 @@ const SelectedMask = (props: IProps) => {
     }, [componentId]);
 
     useEffect(() => {
-        updatePosition();
+        setTimeout(() => {
+            updatePosition();
+        }, 200)
     }, [components]);
 
     useEffect(() => {
@@ -61,7 +63,6 @@ const SelectedMask = (props: IProps) => {
         window.addEventListener('resize', resizeHandler);
 
         return () => {
-            console.log('end');
             window.removeEventListener('resize', resizeHandler);
         }
     }, []);
