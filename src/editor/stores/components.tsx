@@ -3,6 +3,10 @@ import { create } from 'zustand';
 import { CommonComponentProps } from '../interface';
 
 type _Omit<T, K extends keyof T> = { [P in keyof T as Exclude<P, K>]: T[P] }
+export enum EMode {
+    edit,
+    preview
+}
 
 export interface Component extends _Omit<CommonComponentProps, 'children'> {
     desc: string;
@@ -12,6 +16,7 @@ export interface Component extends _Omit<CommonComponentProps, 'children'> {
 }
 
 interface State {
+    mode: EMode,
     components: Component[];
     curComponent: Component | null;
     curComponentId?: number | null;
@@ -23,6 +28,7 @@ interface Action {
     updateComponent: (componentId: number, props: any) => void;
     setCurComponentId: (componentId: number | null) => void;
     updateComponentStyles: (componentId: number, styles: CSSProperties, replace?: boolean) => void;
+    setMode: (mode: EMode) => void;
 }
 
 export const useComponentsStore = create<State & Action>(((set, get) => ({
@@ -30,8 +36,9 @@ export const useComponentsStore = create<State & Action>(((set, get) => ({
         id: 1,
         name: 'Page',
         props: {},
-        desc: 'root page'
+        desc: 'root page',
     }],
+    mode: EMode.edit,
     curComponent: null,
     curComponentId: null,
     setCurComponentId: (componentId) => set((state) => ({
@@ -79,7 +86,8 @@ export const useComponentsStore = create<State & Action>(((set, get) => ({
             return { components: [...state.components] };
         }
         return { components: [...state.components] };
-    })
+    }),
+    setMode: (mode) => set({ mode })
 })))
 
 export function getComponentById(id: number | null, components: Component[]): Component | null {

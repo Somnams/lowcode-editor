@@ -3,6 +3,9 @@ import Container from "../materials/Container";
 import Button from "../materials/Button";
 import Page from "../materials/Page";
 import { Input, InputNumber, Select } from "antd";
+import ButtonPreview from "../materials/Button/preview";
+import ContainerPreview from "../materials/Container/preview";
+import PagePreview from "../materials/Page/preview";
 
 export interface ComponentSetter {
     name: string;
@@ -18,6 +21,7 @@ export interface ComponentConfig {
     component: any;
     setter?: ComponentSetter[];
     stylesSetter?: ComponentSetter[];
+    preview: any;
 }
 
 interface State {
@@ -30,9 +34,11 @@ interface Action {
 
 export const useComponentsConfigStore = create<State & Action>((set) => ({
     componentConfig: {
-        Container: { name: "Container", desc: 'container', defaultProps: {}, component: Container },
+        Container: { name: "Container", desc: 'container', defaultProps: {}, component: Container, preview: ContainerPreview },
         Button: {
-            name: "Button", desc: 'button', defaultProps: { type: 'primary', text: 'primary' }, component: Button,
+            name: "Button", desc: 'button', defaultProps: { type: 'primary', text: 'primary' },
+            component: Button,
+            preview: ButtonPreview,
             setter: [
                 {
                     name: 'type', label: 'Button Type',
@@ -63,7 +69,7 @@ export const useComponentsConfigStore = create<State & Action>((set) => ({
                 }
             ]
         },
-        Page: { name: 'Page', desc: 'root page', defaultProps: {}, component: Page }
+        Page: { name: 'Page', desc: 'root page', defaultProps: {}, component: Page, preview: PagePreview }
     } as Record<string, ComponentConfig>,
     registerComponent: (name, componentConfig) => set((state) => {
         return { componentConfig: { ...state.componentConfig, [name]: componentConfig } };

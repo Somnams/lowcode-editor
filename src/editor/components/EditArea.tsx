@@ -34,7 +34,7 @@ const EditArea = () => {
     };
 
     const renderComponents = (components: Component[]): React.ReactNode => {
-        return components.map((c: Component) => {
+        return components?.map((c: Component) => {
             const config = componentConfig?.[c.name];
             if (!config?.component) return null;
 
