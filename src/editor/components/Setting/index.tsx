@@ -12,7 +12,7 @@ const Setting = () => {
     const { curComponentId, curComponent } = useComponentsStore();
 
     return <div> {(curComponentId || curComponent) ? <>
-        <Segmented block defaultValue={key} onChange={setKey} options={settingCols} />
+        <Segmented block value={key} onChange={setKey} options={settingCols} />
         <div className="pt-[20px]">
             {key === ESetting.attribution && <ComponentAttr />}
             {key === ESetting.event && <ComponentEvent />}
