@@ -5,7 +5,7 @@ import { useEffect } from "react";
 
 const ComponentAttr = () => {
     const [form] = Form.useForm();
-    const { curComponent, curComponentId, updateComponent } = useComponentsStore();
+    const { curComponent, curComponentId, updateComponentProps } = useComponentsStore();
     const { componentConfig } = useComponentsConfigStore();
 
     useEffect(() => {
@@ -16,7 +16,7 @@ const ComponentAttr = () => {
 
     const handleValueChange = (changedValues: ComponentConfig) => {
         if (curComponentId) {
-            updateComponent(curComponentId, changedValues);
+            updateComponentProps(curComponentId, changedValues);
         }
     };
 

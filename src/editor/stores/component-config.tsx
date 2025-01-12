@@ -14,14 +14,20 @@ export interface ComponentSetter {
     [key: string]: any;
 }
 
+export interface IComponentEvent {
+    name: string;
+    label: string;
+}
+
 export interface ComponentConfig {
     name: string;
     desc: string;
     defaultProps: Record<string, any>;
     component: any;
+    preview: any;
+    events?: IComponentEvent[];
     setter?: ComponentSetter[];
     stylesSetter?: ComponentSetter[];
-    preview: any;
 }
 
 interface State {
@@ -66,6 +72,16 @@ export const useComponentsConfigStore = create<State & Action>((set) => ({
                         min: 20,
                         step: 1
                     },
+                }
+            ],
+            events: [
+                {
+                    name: 'onClick',
+                    label: 'click'
+                },
+                {
+                    name: 'onDoubleClick',
+                    label: 'double click'
                 }
             ]
         },

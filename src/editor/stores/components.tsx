@@ -25,7 +25,7 @@ interface State {
 interface Action {
     addComponent: (component: Component, parentId?: number) => void;
     deleteComponent: (componentId: number) => void;
-    updateComponent: (componentId: number, props: any) => void;
+    updateComponentProps: (componentId: number, props: any) => void;
     setCurComponentId: (componentId: number | null) => void;
     updateComponentStyles: (componentId: number, styles: CSSProperties, replace?: boolean) => void;
     setMode: (mode: EMode) => void;
@@ -72,7 +72,7 @@ export const useComponentsStore = create<State & Action>(((set, get) => ({
             }
         }
     },
-    updateComponent: (componentId, props) => set((state) => {
+    updateComponentProps: (componentId, props) => set((state) => {
         const comp = getComponentById(componentId, state.components);
         if (comp) {
             comp.props = { ...comp.props, ...props };
