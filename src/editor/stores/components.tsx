@@ -2,7 +2,7 @@ import { CSSProperties } from 'react';
 import { create } from 'zustand';
 import { CommonComponentProps } from '../interface';
 
-type _Omit<T, K extends keyof T> = { [P in keyof T as Exclude<P, K>]: T[P] }
+export type _Omit<T, K extends keyof T> = { [P in keyof T as Exclude<P, K>]: T[P] }
 export enum EMode {
     edit,
     preview

@@ -1,10 +1,11 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useRef } from "react";
 import { Component, useComponentsStore } from "../../stores/components";
 import { ComponentConfig, IComponentEvent, useComponentsConfigStore } from "../../stores/component-config";
 import { message } from "antd";
-import { EActions, ICommonConfig, TCustomEventsConfig, TGoToLinkConfig, TShowMessageConfig } from "../Setting/actions/interface";
+import { EActions, ICommonConfig, TCompMethodsConfig, TCustomEventsConfig, TGoToLinkConfig, TSettingActionsConfig, TShowMessageConfig } from "../Setting/actions/interface";
 
 const Preview = () => {
+    const compRefs = useRef<Record<string, any>>({});
     const { components } = useComponentsStore();
     const { componentConfig } = useComponentsConfigStore();
 
@@ -15,7 +16,7 @@ const Preview = () => {
             const eventConfig = component.props[event.name];
             if (eventConfig) {
                 props[event.name] = () => {
-                    eventConfig?.actions?.forEach((action: ICommonConfig<TShowMessageConfig | TGoToLinkConfig | TCustomEventsConfig>) => {
+                    eventConfig?.actions?.forEach((action: ICommonConfig<TSettingActionsConfig>) => {
                         const { type, config } = action;
                         switch (type) {
                             case EActions.goToLink:
@@ -43,6 +44,13 @@ const Preview = () => {
                                     }
                                 });
                                 return;
+                            case EActions.compMethods:
+                                const { componentId, method } = config as TCompMethodsConfig;
+                                const comp = compRefs.current[componentId];
+                                if (comp) {
+                                    comp[method]?.();
+                                }
+                                return;
                             default:
                                 break;
                         }
@@ -64,6 +72,7 @@ const Preview = () => {
                 id: c.id,
                 name: c.name,
                 styles: c.styles,
+                ref: (ref: Record<string, any>) => { compRefs.current[c.id] = ref },
                 ...config.defaultProps,
                 ...c.props,
                 ...handleEvent(c)

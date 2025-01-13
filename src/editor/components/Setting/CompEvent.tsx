@@ -3,7 +3,7 @@ import { useComponentsStore } from "../../stores/components";
 import { IComponentEvent, useComponentsConfigStore } from "../../stores/component-config";
 import { useMemo, useState } from "react";
 import ActionModal from "./actions/Modal";
-import { EActions, ICommonConfig, TCustomEventsConfig, TGoToLinkConfig, TSettingActionsConfig, TShowMessageConfig } from "./actions/interface";
+import { EActions, ICommonConfig, TGoToLinkConfig, TSettingActionsConfig, TShowMessageConfig } from "./actions/interface";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 const ComponentEvent = () => {
@@ -29,9 +29,10 @@ const ComponentEvent = () => {
         })
     };
 
-    const handleEditAction = (config: ICommonConfig<TSettingActionsConfig>, index: number) => {
+    const handleEditAction = (event: IComponentEvent, config: ICommonConfig<TSettingActionsConfig>, index: number) => {
         if (!curComponentId) return;
 
+        setCurEvent(event);
         setCurAction(config);
         setCurActionIndex(index);
         setActionsModalVisible(true);
@@ -64,7 +65,7 @@ const ComponentEvent = () => {
                                 <div className="text-[blue]">OPEN LINK</div>
                                 <div>{(c as ICommonConfig<TGoToLinkConfig>).config.url}</div>
                                 <div style={{ position: 'absolute', top: 10, right: 30, cursor: 'pointer' }}
-                                    onClick={() => handleEditAction(c, index)}
+                                    onClick={() => handleEditAction(event, c, index)}
                                 >
                                     <EditOutlined />
                                 </div>
@@ -81,7 +82,7 @@ const ComponentEvent = () => {
                                 <div>{(c as ICommonConfig<TShowMessageConfig>).config.type}</div>
                                 <div>{(c as ICommonConfig<TShowMessageConfig>).config.text}</div>
                                 <div style={{ position: 'absolute', top: 10, right: 30, cursor: 'pointer' }}
-                                    onClick={() => handleEditAction(c, index)}
+                                    onClick={() => handleEditAction(event, c, index)}
                                 >
                                     <EditOutlined />
                                 </div>
@@ -96,7 +97,22 @@ const ComponentEvent = () => {
                             c.type === EActions.customEvents && <div className="border border-[#aaa] m-[10px] p-[10px] relative">
                                 <div className="text-[blue]">CUSTOM JS EVENTS</div>
                                 <div style={{ position: 'absolute', top: 10, right: 30, cursor: 'pointer' }}
-                                    onClick={() => handleEditAction(c, index)}
+                                    onClick={() => handleEditAction(event, c, index)}
+                                >
+                                    <EditOutlined />
+                                </div>
+                                <div style={{ position: 'absolute', top: 10, right: 10, cursor: 'pointer' }}
+                                    onClick={() => handleDeleteAction(event, index)}
+                                >
+                                    <DeleteOutlined />
+                                </div>
+                            </div>
+                        }
+                        {
+                            c.type === EActions.compMethods && <div className="border border-[#aaa] m-[10px] p-[10px] relative">
+                                <div className="text-[blue]">COMP METHODS</div>
+                                <div style={{ position: 'absolute', top: 10, right: 30, cursor: 'pointer' }}
+                                    onClick={() => handleEditAction(event, c, index)}
                                 >
                                     <EditOutlined />
                                 </div>
@@ -113,7 +129,7 @@ const ComponentEvent = () => {
         </div>
     }));
 
-    const handleModalOk = (config: ICommonConfig<TGoToLinkConfig | TShowMessageConfig | TCustomEventsConfig>) => {
+    const handleModalOk = (config: ICommonConfig<TSettingActionsConfig>) => {
         if (!config || !curEvent || !curComponent) return;
 
         if (curAction) {

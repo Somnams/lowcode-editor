@@ -6,6 +6,8 @@ import { Input, InputNumber, Select } from "antd";
 import ButtonPreview from "../materials/Button/preview";
 import ContainerPreview from "../materials/Container/preview";
 import PagePreview from "../materials/Page/preview";
+import MaterialModal from "../materials/Modal";
+import MaterialModalPreview from '../materials/Modal/preview';
 
 export interface ComponentSetter {
     name: string;
@@ -19,6 +21,8 @@ export interface IComponentEvent {
     label: string;
 }
 
+export interface IComponentMethod extends Pick<IComponentEvent, 'name' | 'label'> { }
+
 export interface ComponentConfig {
     name: string;
     desc: string;
@@ -26,6 +30,7 @@ export interface ComponentConfig {
     component: any;
     preview: any;
     events?: IComponentEvent[];
+    methods?: IComponentMethod[];
     setter?: ComponentSetter[];
     stylesSetter?: ComponentSetter[];
 }
@@ -85,7 +90,26 @@ export const useComponentsConfigStore = create<State & Action>((set) => ({
                 }
             ]
         },
-        Page: { name: 'Page', desc: 'root page', defaultProps: {}, component: Page, preview: PagePreview }
+        Page: { name: 'Page', desc: 'root page', defaultProps: {}, component: Page, preview: PagePreview },
+        Modal: {
+            name: 'Modal',
+            desc: 'modal',
+            defaultProps: { title: 'modal title' },
+            setter: [
+                { name: 'title', label: 'Title', Comp: Input }
+            ],
+            stylesSetter: [],
+            events: [
+                { name: 'onOk', label: 'ok event' },
+                { name: 'onCancel', label: 'cancel event' }
+            ],
+            methods: [
+                { name: 'open', label: 'open modal' },
+                { name: 'close', label: 'close modal' }
+            ],
+            preview: MaterialModalPreview,
+            component: MaterialModal
+        }
     } as Record<string, ComponentConfig>,
     registerComponent: (name, componentConfig) => set((state) => {
         return { componentConfig: { ...state.componentConfig, [name]: componentConfig } };

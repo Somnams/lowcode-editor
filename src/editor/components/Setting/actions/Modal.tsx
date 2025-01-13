@@ -1,9 +1,10 @@
 import { Modal, Segmented } from "antd";
-import { EActions, ICommonConfig, TCustomEventsConfig, TGoToLinkConfig, TSettingActionsConfig, TShowMessageConfig } from "./interface";
+import { EActions, ICommonConfig, TSettingActionsConfig } from "./interface";
 import GoToLink from "./GoToLink";
 import ShowMessage from "./ShowMessage";
 import { useEffect, useMemo, useState } from "react";
 import CustomEvents from "./CustomEvent";
+import CompMethods from "./CompMethods";
 
 interface IProps {
     visible: boolean;
@@ -15,6 +16,7 @@ interface IProps {
 export const actionCols = [
     { label: 'open link', value: EActions.goToLink, Comp: GoToLink },
     { label: 'message', value: EActions.showTips, Comp: ShowMessage },
+    { label: 'components methods', value: EActions.compMethods, Comp: CompMethods },
     { label: 'custom event', value: EActions.customEvents, Comp: CustomEvents },
 ];
 
@@ -22,7 +24,7 @@ const ActionModal = (props: IProps) => {
     const { visible, handleCancel, handleOk, action } = props;
 
     const [key, setKey] = useState(EActions.goToLink);
-    const [config, setConfig] = useState<ICommonConfig<TGoToLinkConfig | TShowMessageConfig | TCustomEventsConfig>>();
+    const [config, setConfig] = useState<ICommonConfig<TSettingActionsConfig>>();
 
     const Comp = useMemo(() => {
         const comp = actionCols.find(a => a.value === key);
@@ -45,7 +47,7 @@ const ActionModal = (props: IProps) => {
         onCancel={handleCancel}
     >
         <Segmented options={actionCols} onChange={setKey} block value={key} />
-        <Comp value={(action?.config || {}) as any} onChange={(c) => setConfig(c)} />
+        <Comp defaultValue={(action?.config || {}) as any} value={action?.config as any || undefined} onChange={(c) => setConfig(c)} />
     </Modal>
 };
 

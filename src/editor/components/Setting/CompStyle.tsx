@@ -35,12 +35,10 @@ const ComponentStyle = () => {
             StyleToObject(cssStr, (name, value) => {
                 css[name.replace(/-\w/, (item) => item.toUpperCase().replace('-', ''))] = value;
             });
-            console.log(css);
             curComponentId && updateComponentStyles(curComponentId, css, true);
         } catch (error) {
 
         }
-        console.log(value);
     }, 800);
 
     const toCss = (cssObj: Record<string, any>) => {
