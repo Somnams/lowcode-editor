@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import { Component, useComponentsStore } from "../../stores/components";
 import { ComponentConfig, IComponentEvent, useComponentsConfigStore } from "../../stores/component-config";
 import { message } from "antd";
-import { EActions, ICommonConfig, TGoToLinkConfig, TShowMessageConfig } from "../Setting/actions/interface";
+import { EActions, ICommonConfig, TCustomEventsConfig, TGoToLinkConfig, TShowMessageConfig } from "../Setting/actions/interface";
 
 const Preview = () => {
     const { components } = useComponentsStore();
@@ -15,7 +15,7 @@ const Preview = () => {
             const eventConfig = component.props[event.name];
             if (eventConfig) {
                 props[event.name] = () => {
-                    eventConfig?.actions?.forEach((action: ICommonConfig<TShowMessageConfig | TGoToLinkConfig>) => {
+                    eventConfig?.actions?.forEach((action: ICommonConfig<TShowMessageConfig | TGoToLinkConfig | TCustomEventsConfig>) => {
                         const { type, config } = action;
                         switch (type) {
                             case EActions.goToLink:
@@ -31,6 +31,17 @@ const Preview = () => {
                                 } else if (type === 'error') {
                                     message.error(text);
                                 }
+                                return;
+                            case EActions.customEvents:
+                                const { code } = config as TCustomEventsConfig;
+                                const func = new Function('context', code);
+                                func({
+                                    name: component.name,
+                                    props: component.props,
+                                    showMessage(content: string) {
+                                        message.success(content);
+                                    }
+                                });
                                 return;
                             default:
                                 break;

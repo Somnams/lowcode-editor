@@ -1,10 +1,10 @@
 import { Input, Select } from "antd";
 import { EActions, ICommonActionsProps, TShowMessageConfig } from "./interface";
 import { useComponentsStore } from "../../../stores/components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const ShowMessage = (props: ICommonActionsProps<TShowMessageConfig>) => {
-    const { onChange, defaultValue } = props;
+    const { onChange, defaultValue, value: valueFromProps } = props;
 
     const [type, setType] = useState(defaultValue?.type || 'success');
     const [text, setText] = useState(defaultValue?.text || '');
@@ -22,6 +22,11 @@ const ShowMessage = (props: ICommonActionsProps<TShowMessageConfig>) => {
         setText(_text);
         onChange?.({ type: EActions.showTips, config: { type, text: _text } });
     };
+
+    useEffect(() => {
+        setType(valueFromProps?.type || 'success');
+        setText(valueFromProps?.text || '');
+    }, [valueFromProps]);
 
     return <div className="mt-[10px]">
         <div className="flex items-center gap-[10px]">

@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useComponentsStore } from "../../../stores/components";
 import { EActions, ICommonActionsProps, TGoToLinkConfig } from "./interface";
 import TextArea from "antd/es/input/TextArea";
 
 const GoToLink = (props: ICommonActionsProps<TGoToLinkConfig>) => {
-    const { defaultValue, onChange } = props;
+    const { defaultValue, onChange, value: valueFromProps } = props;
 
     const [value, setValue] = useState(defaultValue?.url);
 
@@ -15,6 +15,10 @@ const GoToLink = (props: ICommonActionsProps<TGoToLinkConfig>) => {
         setValue(val);
         onChange?.({ type: EActions.goToLink, config: { url: val } });
     };
+
+    useEffect(() => {
+        setValue(valueFromProps?.url);
+    }, [valueFromProps]);
 
     return <div className="mt-[10px]">
         <div className="flex  gap-[10px]">
