@@ -8,6 +8,10 @@ import ContainerPreview from "../materials/Container/preview";
 import PagePreview from "../materials/Page/preview";
 import MaterialModal from "../materials/Modal";
 import MaterialModalPreview from '../materials/Modal/preview';
+import Table from "../materials/Table";
+import TablePreview from "../materials/Table/preview";
+import TableColumn from "../materials/TableColumn";
+import TableColumnPreview from "../materials/TableColumn/preview";
 
 export interface ComponentSetter {
     name: string;
@@ -109,6 +113,39 @@ export const useComponentsConfigStore = create<State & Action>((set) => ({
             ],
             preview: MaterialModalPreview,
             component: MaterialModal
+        },
+        Table: {
+            name: 'Table',
+            defaultProps: {},
+            desc: 'table',
+            setter: [
+                { name: 'url', label: 'url', Comp: Input }
+            ],
+            component: Table,
+            preview: TablePreview
+        },
+        TableColumn: {
+            name: 'TableColumn',
+            desc: 'table column',
+            defaultProps: { dataIndex: `col_${new Date().getTime()}`, title: 'column' },
+            setter: [
+                {
+                    name: 'type',
+                    label: 'Type',
+                    Comp: Select,
+                    props: { options: [{ label: 'Text', value: "text" }, { label: 'Date', value: 'date' }] }
+                }, {
+                    name: 'title',
+                    label: 'Title',
+                    Comp: Input
+                }, {
+                    name: 'dataIndex',
+                    label: 'Field',
+                    Comp: Input
+                }
+            ],
+            component: TableColumn,
+            preview: TableColumnPreview
         }
     } as Record<string, ComponentConfig>,
     registerComponent: (name, componentConfig) => set((state) => {

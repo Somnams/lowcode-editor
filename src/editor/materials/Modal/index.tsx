@@ -2,7 +2,7 @@ import useMaterialDrop from "../../hooks/useMaterialDrop";
 import { CommonComponentProps } from "../../interface";
 
 const MaterialModal = ({ id, children, title, styles }: CommonComponentProps) => {
-    const { canDrop, drop } = useMaterialDrop(['Button', 'Container'], id);
+    const { canDrop, drop } = useMaterialDrop(['Button', 'Container', 'Table'], id);
 
     return <div
         ref={drop}

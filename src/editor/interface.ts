@@ -6,3 +6,14 @@ export interface CommonComponentProps extends PropsWithChildren {
     styles?: CSSProperties;
     [key: string]: any
 }
+
+export enum EMaterialAction {
+    move,
+    add
+};
+
+export interface IMaterialAction {
+    type: string;
+    dragType: EMaterialAction,
+    id: number
+}
