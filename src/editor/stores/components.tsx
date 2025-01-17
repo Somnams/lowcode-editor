@@ -91,7 +91,64 @@ const creator: StateCreator<State & Action> = (set, get) => ({
     setMode: (mode) => set({ mode })
 })
 
-export const useComponentsStore = create<State & Action>()(persist(creator, { name: 'xxx' }));
+export const useComponentsStore = create<State & Action>((set, get) => ({
+    components: [{
+        id: 1,
+        name: 'Page',
+        props: {},
+        desc: 'root page',
+    }],
+    mode: EMode.edit,
+    curComponent: null,
+    curComponentId: null,
+    setCurComponentId: (componentId) => set((state) => ({
+        curComponentId: componentId,
+        curComponent: getComponentById(componentId, state.components)
+    })),
+    addComponent: (component, parentId) => set((state) => {
+        if (parentId) {
+            const pComp = getComponentById(parentId, state.components);
+            if (pComp) {
+                if (Array.isArray(pComp.children)) {
+                    pComp.children.push(component);
+                } else {
+                    pComp.children = [component];
+                }
+            }
+            component.parentId = parentId;
+            return { components: [...state.components] };
+        }
+        return { components: [...state.components, component] };
+    }),
+    deleteComponent: (componentId) => {
+        if (!componentId) return;
+
+        const comp = getComponentById(componentId, get().components);
+        if (comp?.parentId) {
+            const pComp = getComponentById(comp.parentId, get().components);
+            if (pComp) {
+                pComp.children = pComp.children?.filter(c => c.id !== componentId);
+                set({ components: [...get().components] });
+            }
+        }
+    },
+    updateComponentProps: (componentId, props) => set((state) => {
+        const comp = getComponentById(componentId, state.components);
+        if (comp) {
+            comp.props = { ...comp.props, ...props };
+        }
+        return { components: [...state.components] };
+    }),
+    updateComponentStyles: (componentId, styles, replace) => set((state) => {
+        const comp = getComponentById(componentId, state.components);
+        if (comp) {
+            comp.styles = replace ? { ...styles } : { ...comp.styles, ...styles };
+            return { components: [...state.components] };
+        }
+        return { components: [...state.components] };
+    }),
+    setMode: (mode) => set({ mode })
+}))
 
 export function getComponentById(id: number | null, components: Component[]): Component | null {
     if (!id) return null;
