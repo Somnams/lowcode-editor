@@ -15,7 +15,7 @@ const Preview = () => {
         componentConfig?.[component.name]?.events?.forEach((event: IComponentEvent) => {
             const eventConfig = component.props[event.name];
             if (eventConfig) {
-                props[event.name] = () => {
+                props[event.name] = (...args: any[]) => {
                     eventConfig?.actions?.forEach((action: ICommonConfig<TSettingActionsConfig>) => {
                         const { type, config } = action;
                         switch (type) {
@@ -35,20 +35,20 @@ const Preview = () => {
                                 return;
                             case EActions.customEvents:
                                 const { code } = config as TCustomEventsConfig;
-                                const func = new Function('context', code);
+                                const func = new Function('context', 'args', code);
                                 func({
                                     name: component.name,
                                     props: component.props,
                                     showMessage(content: string) {
                                         message.success(content);
                                     }
-                                });
+                                }, args);
                                 return;
                             case EActions.compMethods:
                                 const { componentId, method } = config as TCompMethodsConfig;
                                 const comp = compRefs.current[componentId];
                                 if (comp) {
-                                    comp[method]?.();
+                                    comp[method]?.(...args);
                                 }
                                 return;
                             default:
@@ -58,6 +58,8 @@ const Preview = () => {
                 };
             }
         });
+
+        console.log(props);
 
         return props;
     };

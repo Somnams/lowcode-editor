@@ -1,6 +1,7 @@
 import { CSSProperties } from 'react';
-import { create } from 'zustand';
+import { create, StateCreator } from 'zustand';
 import { CommonComponentProps } from '../interface';
+import { persist } from 'zustand/middleware';
 
 export type _Omit<T, K extends keyof T> = { [P in keyof T as Exclude<P, K>]: T[P] }
 export enum EMode {
@@ -31,7 +32,7 @@ interface Action {
     setMode: (mode: EMode) => void;
 }
 
-export const useComponentsStore = create<State & Action>(((set, get) => ({
+const creator: StateCreator<State & Action> = (set, get) => ({
     components: [{
         id: 1,
         name: 'Page',
@@ -88,7 +89,9 @@ export const useComponentsStore = create<State & Action>(((set, get) => ({
         return { components: [...state.components] };
     }),
     setMode: (mode) => set({ mode })
-})))
+})
+
+export const useComponentsStore = create<State & Action>()(persist(creator, { name: 'xxx' }));
 
 export function getComponentById(id: number | null, components: Component[]): Component | null {
     if (!id) return null;

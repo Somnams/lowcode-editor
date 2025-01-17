@@ -12,6 +12,10 @@ import Table from "../materials/Table";
 import TablePreview from "../materials/Table/preview";
 import TableColumn from "../materials/TableColumn";
 import TableColumnPreview from "../materials/TableColumn/preview";
+import Form from "../materials/Form";
+import FormPreview from "../materials/Form/preview";
+import FormItem from "../materials/FormItem";
+import FormItemPreview from "../materials/FormItem/preview";
 
 export interface ComponentSetter {
     name: string;
@@ -146,6 +150,50 @@ export const useComponentsConfigStore = create<State & Action>((set) => ({
             ],
             component: TableColumn,
             preview: TableColumnPreview
+        },
+        Form: {
+            name: 'Form',
+            defaultProps: {},
+            desc: 'form',
+            setter: [
+                { name: 'title', label: 'Title', Comp: Input }
+            ],
+            events: [
+                { name: 'onFinish', label: 'Finish' }
+            ],
+            methods: [{ name: 'submit', label: 'Submit' }],
+            component: Form,
+            preview: FormPreview
+        },
+        FormItem: {
+            name: 'FormItem',
+            desc: 'form item',
+            defaultProps: { name: new Date().getTime(), label: 'Name', type: 'text' },
+            setter: [
+                {
+                    name: 'type',
+                    label: 'Type',
+                    Comp: Select,
+                    props: { options: [{ label: 'Text', value: 'text' }, { label: 'Date', value: 'date' }] }
+                }, {
+                    name: "label",
+                    label: 'Label',
+                    Comp: Input
+                }, {
+                    name: 'name',
+                    label: 'Field',
+                    Comp: Input
+                }, {
+                    name: 'rules',
+                    label: 'Rules',
+                    Comp: Select,
+                    props: {
+                        options: [{ label: 'Required', value: 'required' }]
+                    }
+                }
+            ],
+            component: FormItem,
+            preview: FormItemPreview
         }
     } as Record<string, ComponentConfig>,
     registerComponent: (name, componentConfig) => set((state) => {

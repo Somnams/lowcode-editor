@@ -160,7 +160,7 @@ const ComponentEvent = () => {
             action={curAction}
             visible={actionsModalVisible}
             handleOk={handleModalOk}
-            handleCancel={() => setActionsModalVisible(false)}
+            handleCancel={() => { setActionsModalVisible(false), setCurAction(undefined) }}
         />
     </div>
 };
